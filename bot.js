@@ -1,18 +1,22 @@
 const puppeteer = require("puppeteer");
+const express = require("express");
 const clc = require("cli-color");
 const ExcelJS = require("exceljs");
-const firstname_input = "firstname";
-const lastname_input = "Lastname";
-const pdf_input = "pdf.pdf";
-const email_input = "email.gmail.com";
+const cookieParser = require("cookie-parser");
+const firstname_input = "Nathan";
+const lastname_input = "Matounga";
+const pdf_input = "nathan.pdf";
+const email_input = "nathan.matounga@epitech.eu";
+const app = express();
 
 (async () => {
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
+  app.use(cookieParser());
 
-  // await page.goto(
-  //   "https://www.hellowork.com/fr-fr/emploi/recherche.html?k=D%C3%A9veloppeur&k_autocomplete=http%3A%2F%2Fwww.rj.com%2FCommun%2FPost%2FDeveloppeur&l=toulon&ray=50&p=4"
-  // );
+  await page.goto(
+    "https://www.hellowork.com/fr-fr/emploi/recherche.html?k=D%C3%A9veloppeur&k_autocomplete=&l=&l_autocomplete=#49038286"
+  );
 
   await page.waitForSelector("#hw-cc-notice-accept-btn", { visible: true });
 
@@ -71,6 +75,16 @@ const email_input = "email.gmail.com";
         "body > main > div.tw-relative > div.tw-layout-grid.tw-mt-6.sm\\:tw-mt-12 > div > div.tw-col-span-full.lg\\:tw-col-span-8 > div > div > h1 > span.tw-block.tw-typo-xl.sm\\:tw-typo-3xl.tw-mb-2",
         (element) => element.textContent
       );
+
+      // Middleware pour supprimer tous les cookies
+      app.use(function (req, res) {
+        // Récupérer la liste des cookies de la requête
+        var cookies = req.cookies;
+        // Parcourir chaque cookie et le supprimer
+        for (var cookie in cookies) {
+          res.clearCookie(cookie);
+        }
+      });
 
       const currentDate = new Date();
       const addLeadingZero = (number) => {
