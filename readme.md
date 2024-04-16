@@ -12,7 +12,7 @@ Web_hello_work est un outil de webscraping conçu pour rechercher des mots-clés
 
 ## Installation
 
-1. Cloner ce dépôt : `git clone https://github.com/dylan-epitech/Web_hello_work.git`
+1. Cloner ce dépôt : `git clone https://github.com/dylan-epitech/Web_hello-work.git`
 2. Assurez-vous d'avoir installé un navigateur web compatible avec Selenium (par exemple, Chrome avec le pilote chromedriver).
 
 ## Utilisation
