@@ -15,7 +15,7 @@ const app = express();
   app.use(cookieParser());
 
   await page.goto(
-    "https://www.hellowork.com/fr-fr/emploi/recherche.html?k=D%C3%A9veloppeur&k_autocomplete=&l=&l_autocomplete=#49038286"
+    "https://www.hellowork.com/fr-fr/emploi/recherche.html?k=D%C3%A9veloppeur&p=8&mode=pagination"
   );
 
   await page.waitForSelector("#hw-cc-notice-accept-btn", { visible: true });
@@ -44,11 +44,38 @@ const app = express();
     anonce_array.push(row.getCell(anonceColumn._number).value);
   }
 
-  const links = await page.$$eval("a", (elements) => {
-    return elements
-      .filter((element) => element.textContent.includes("Developpeur"))
-      .map((element) => element.href);
-  });
+  const links = await page.$$eval(
+    "a",
+    (elements, keyword1, keyword2, keyword3, keyword4, keyword5) => {
+      return elements
+        .filter(
+          (element) =>
+            element.textContent.includes(keyword1) ||
+            element.textContent.includes(keyword2) ||
+            element.textContent.includes(keyword3) ||
+            element.textContent.includes(keyword4) ||
+            element.textContent.includes(keyword5)
+        )
+        .map((element) => element.href);
+    },
+    "Developpeur",
+    "developpeur",
+    "web",
+    "développeur",
+    "Développeur",
+    "Développeur.e",
+    "Développeuse",
+    "développeur.e",
+    "developpeur.e",
+    "Developpeur.e",
+    "Programmeur",
+    "programmeur",
+    "php",
+    "PHP",
+    "JS",
+    "js",
+    "javascript"
+  );
 
   for (const link of links) {
     await page.goto(link);
